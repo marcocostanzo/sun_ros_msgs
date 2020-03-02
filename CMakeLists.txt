@@ -9,6 +9,8 @@ add_compile_options(-std=c++11)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   std_msgs
+  std_srvs
+  roscpp
   message_generation
 )
 
@@ -54,11 +56,10 @@ add_message_files(FILES
 )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+ add_service_files(
+   FILES
+   Trigger.srv
+ )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -70,6 +71,7 @@ add_message_files(FILES
 ## Generate added messages and services with any dependencies listed here
 generate_messages(DEPENDENCIES
   std_msgs
+  std_srvs
 )
 
 ################################################
@@ -103,7 +105,7 @@ generate_messages(DEPENDENCIES
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   CATKIN_DEPENDS
-  message_runtime std_msgs
+  message_runtime std_msgs std_srvs
 #  INCLUDE_DIRS include
 #  LIBRARIES sun_ros_msgs
 #  CATKIN_DEPENDS other_catkin_pkg
@@ -198,3 +200,13 @@ ${catkin_INCLUDE_DIRS}
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+#########################################
+add_executable(matlab_trigger_server
+  src/matlab_trigger_server_node.cpp
+)
+add_dependencies(matlab_trigger_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(matlab_trigger_server
+  ${catkin_LIBRARIES}
+)
+#########################################
